@@ -13,11 +13,22 @@ let raceData = {
 
 app.post('/api/setRace', (req, res) => {
   const { track, distance } = req.body;
-  raceData.track = track;
-  raceData.distance = distance;
-  raceData.fractions = [];
+
+  // ✅ This resets the full raceData
+  raceData = {
+    track,
+    distance,
+    fractions: []
+  };
+
   res.json({ status: 'ok', message: 'Race initialized' });
 });
+
+app.post('/api/resetRace', (req, res) => {
+  raceData.fractions = [];
+  res.json({ status: 'ok', message: 'Race fractions cleared' });
+});
+
 
 app.post('/api/addFraction', (req, res) => {
   const { label, time } = req.body;
