@@ -156,25 +156,31 @@
       document.getElementById("liveTime").innerText = `Time: ${formatTime(fifths)}`;
     }
 
-    async function triggerFraction() {
-      const idx = fractions.length;
-      if (idx < labels.length) {
-        const label = labels[idx];
-        const time = formatTime(fifths);
-        const entry = { Distance: label, Time: time };
-        fractions.push(entry);
+async function triggerFraction() {
+  const idx = fractions.length;
+  if (idx < labels.length) {
+    const label = labels[idx];
+    const time = formatTime(fifths);
+    const entry = { Distance: label, Time: time };
+    fractions.push(entry);
 
-        const div = document.createElement("div");
-        div.innerText = `${label}: ${time}`;
-        document.getElementById("fractionsContainer").appendChild(div);
+    const div = document.createElement("div");
+    div.innerText = `${label}: ${time}`;
+    document.getElementById("fractionsContainer").appendChild(div);
 
-        await fetch('/api/addFraction', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ label, time })
-        });
-      }
+    await fetch('/api/addFraction', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ label, time })
+    });
+
+    // 🛑 Auto-stop timer if this is the "Finish" fraction
+    if (label === "Finish") {
+      stopRace();
     }
+  }
+}
+
 
     function startRace() {
       if (!timer) {
@@ -197,6 +203,17 @@
       document.getElementById("fractionsContainer").innerHTML = "<h3>Fractions</h3>";
       fractions = [];
     }
+
+    document.addEventListener('keydown', async (e) => {
+  if (e.key === 'Enter') {
+    startRace();
+    e.preventDefault();
+  } else if (e.code === 'Space') {
+    e.preventDefault();  // prevent scrolling
+    await triggerFraction();
+  }
+});
+
   </script>
 </body>
 </html>
