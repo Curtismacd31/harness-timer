@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Harness Race Timer</title>
+  <style>
+    body { font-family: Arial; background: #111; color: #fff; padding: 20px; }
+    select, button { margin: 5px; padding: 10px; }
+    .fractions { margin-top: 20px; }
+    .fractions div { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Harness Race Timer</h1>
+
+  <label>Track:</label>
+  <select id="trackSelect">
+    <option value="Grand River">Grand River</option>
+    <option value="Mohawk">Mohawk</option>
+    <option value="Rideau Carleton">Rideau Carleton</option>
+  </select>
+
+  <label>Distance:</label>
+  <select id="distanceSelect">
+    <option value="1 Mile">1 Mile</option>
+    <option value="1 Mile 1/8">1 Mile 1/8</option>
+  </select>
+
+  <div>
+    <button onclick="readyRace()">Ready</button>
+    <button onclick="startRace()">Start Race</button>
+    <button onclick="triggerFraction()">Trigger Fraction</button>
+    <button onclick="stopRace()">Stop Race</button>
+    <button onclick="resetRace()">Reset Race</button>
+    <button onclick="clearDisplay()">Clear Displays</button>
+  </div>
+
+  <h2 id="liveTime">Time: </h2>
+
+  <div class="fractions" id="fractionsContainer"></div>
+
+ <script>
+  let timer = null;
+  let fifths = 0;
+  let fractions = [];
+  const labels = ["1/4", "1/2", "3/4", "Finish", "Extra 1", "Extra 2"];
+
+  async function readyRace() {
+    tenths = 0;
+    fractions = [];
+    document.getElementById("fractionsContainer").innerHTML = '';
+    document.getElementById("liveTime").innerText = "Time: ";
+
+    const track = document.getElementById("trackSelect").value;
+    const distance = document.getElementById("distanceSelect").value;
+
+    await fetch('/api/setRace', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ track, distance })
+    });
+  }
+
+function formatTime(fifths) {
+  const totalFifths = fifths; // 5 fifths per second
+  const minutes = Math.floor(totalFifths / 300); // 300 fifths = 60s
+  const seconds = Math.floor((totalFifths % 300) / 5);
+  const fraction = totalFifths % 5; // 0–4
+
+  // Only use 1 decimal place, representing .0 to .4
+  const decimal = `.${fraction}`;
+
+  if (minutes > 0) {
+    return `${minutes}:${seconds.toString().padStart(2, '0')}${decimal}`;
+  } else {
+    return `${seconds}${decimal}`;
+  }
+}
+
+
+
+  function updateTime() {
+	  fifths++;
+	  document.getElementById("liveTime").innerText = `Time: ${formatTime(fifths)}`;
+	}
+
+
+	async function triggerFraction() {
+	  const idx = fractions.length;
+	  if (idx < labels.length) {
+		const label = labels[idx];
+		const time = formatTime(fifths);  // Make sure this is formatted string!
+		const entry = { Distance: label, Time: time };
+		fractions.push(entry);
+
+		// Display
+		const div = document.createElement("div");
+		div.innerText = `${label}: ${time}`;
+		document.getElementById("fractionsContainer").appendChild(div);
+
+		// Send to server
+		await fetch('/api/addFraction', {
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json' },
+		  body: JSON.stringify({ label, time })  // <- formatted time sent here
+		});
+	  }
+	}
+
+  function startRace() {
+    if (!timer) {
+      timer = setInterval(updateTime, 200);
+    }
+  }
+
+  function stopRace() {
+    clearInterval(timer);
+    timer = null;
+  }
+
+  function resetRace() {
+    stopRace();
+    fifths = 0;
+    document.getElementById("liveTime").innerText = "Time: 0.0";
+  }
+
+  function clearDisplay() {
+    document.getElementById("fractionsContainer").innerHTML = '';
+    fractions = [];
+  }
+
+</script>
+
+</body>
+</html>
