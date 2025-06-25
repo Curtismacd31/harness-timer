@@ -13,39 +13,6 @@ let raceData = {
   fractions: []
 };
 
-// Store connected TCP clients
-const tcpClients = [];
-
-// TCP Server to broadcast JSON
-const tcpServer = net.createServer((socket) => {
-  console.log('TCP client connected');
-  tcpClients.push(socket);
-
-  socket.on('end', () => {
-    console.log('TCP client disconnected');
-    const index = tcpClients.indexOf(socket);
-    if (index !== -1) tcpClients.splice(index, 1);
-  });
-
-  socket.on('error', (err) => {
-    console.log('TCP client error:', err.message);
-  });
-});
-
-tcpServer.listen(1001, () => {
-  console.log('TCP server listening on port 1001');
-});
-
-function broadcastRaceData() {
-  const json = JSON.stringify(raceData);
-  tcpClients.forEach((client) => {
-    try {
-      client.write(json + '\n');
-    } catch (err) {
-      console.log('TCP broadcast error:', err.message);
-    }
-  });
-}
 
 
 app.post('/api/setRace', (req, res) => {
@@ -95,7 +62,7 @@ app.post('/api/addFraction', (req, res) => {
   }
 
   // ✅ Send full JSON to TCP clients
-  broadcastRaceData();
+  //broadcastRaceData();
 
   res.json({ status: 'ok', message: 'Fraction recorded and pushed' });
 });
