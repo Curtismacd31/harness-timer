@@ -36,6 +36,18 @@ tcpServer.listen(1001, () => {
   console.log('TCP server listening on port 1001');
 });
 
+function broadcastRaceData() {
+  const json = JSON.stringify(raceData);
+  tcpClients.forEach((client) => {
+    try {
+      client.write(json + '\n');
+    } catch (err) {
+      console.log('TCP broadcast error:', err.message);
+    }
+  });
+}
+
+
 app.post('/api/setRace', (req, res) => {
   const { track, distance } = req.body;
 
@@ -68,6 +80,26 @@ app.get('/api/json', (req, res) => {
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+app.post('/api/addFraction', (req, res) => {
+  const { label, time } = req.body;
+  const fraction = { Distance: label, Time: time };
+  raceData.fractions.push(fraction);
+
+  // Send to UDP if configured
+  if (udpTarget.ip && udpTarget.port) {
+    const message = Buffer.from(JSON.stringify(fraction));
+    udpClient.send(message, udpTarget.port, udpTarget.ip, (err) => {
+      if (err) console.error('UDP send error:', err);
+    });
+  }
+
+  // ✅ Send full JSON to TCP clients
+  broadcastRaceData();
+
+  res.json({ status: 'ok', message: 'Fraction recorded and pushed' });
+});
+
 
 const PORT = 3000;
 app.listen(PORT, () => {
