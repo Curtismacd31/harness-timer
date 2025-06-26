@@ -187,6 +187,7 @@ async function triggerFraction() {
 
     function startRace() {
       if (!timer) {
+        readyRace()
         timer = setInterval(updateTime, 200);
       }
     }
