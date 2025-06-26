@@ -165,6 +165,12 @@ async function triggerFraction() {
     const label = labels[idx];
     const time = formatTime(fifths);
     const entry = { Distance: label, Time: time };
+
+    // 🛑 Auto-stop timer if this is the "Finish" fraction
+    if (label === "Finish") {
+      stopRace();
+    }
+    
     fractions.push(entry);
 
     const div = document.createElement("div");
@@ -177,10 +183,6 @@ async function triggerFraction() {
       body: JSON.stringify({ label, time })
     });
 
-    // 🛑 Auto-stop timer if this is the "Finish" fraction
-    if (label === "Finish") {
-      stopRace();
-    }
   }
 }
 
