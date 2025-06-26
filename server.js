@@ -1,9 +1,8 @@
 const express = require('express');
 const app = express();
-const dgram = require('dgram');
-const net = require('net');
 const path = require('path');
-
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: process.env.PORT || 1001 });
 app.use(express.static('public'));
 app.use(express.json());
 
@@ -47,6 +46,16 @@ app.get('/api/json', (req, res) => {
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+
+//CREATE A WEB SOCKET FOR LIVE UPDATES
+wss.on('connection', (ws) => {
+  console.log('WebSocket client connected');
+  ws.send(JSON.stringify(raceData));
+
+  ws.on('close', () => console.log('WebSocket client disconnected'));
+});
+
 
 app.post('/api/addFraction', (req, res) => {
   const { label, time } = req.body;
