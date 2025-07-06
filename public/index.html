@@ -1,93 +1,3 @@
-<div class="container">
-  <!-- Top Section -->
-  <div class="top-section">
-    <select id="trackName">...</select>
-    <select id="raceDistance">...</select>
-    <div id="raceInfo">Race #3 – 1 Mile</div>
-  </div>
-
-  <!-- Middle Section (Fractions) -->
-  <div class="fractions-section">
-    <div class="fraction">1/4: <span id="frac1">--</span></div>
-    <div class="fraction">1/2: <span id="frac2">--</span></div>
-    <div class="fraction">3/4: <span id="frac3">--</span></div>
-    <div class="fraction">Finish: <span id="frac4">--</span></div>
-  </div>
-
-  <!-- Bottom Section (Buttons) -->
-  <div class="controls-section">
-    <button onclick="startRace()">Start Race</button>
-    <button onclick="triggerFraction()">Trigger Fraction</button>
-    <button onclick="stopRace()">Stop</button>
-    <button onclick="resetRace()">Reset</button>
-  </div>
-</div>
-✅ CSS (Mobile-Friendly)
-css
-Copy
-Edit
-.container {
-  padding: 10px;
-  max-width: 480px;
-  margin: auto;
-  font-family: sans-serif;
-}
-
-.top-section,
-.controls-section {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-}
-
-.fractions-section {
-  margin: 20px 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
-  text-align: center;
-  font-size: 1.5em;
-}
-
-button, select {
-  padding: 10px;
-  flex: 1 1 45%;
-  min-width: 120px;
-  font-size: 1em;
-}
-
-@media (max-width: 480px) {
-  .controls-section button {
-    flex: 1 1 100%;
-  }
-}
-Would you like me to format your existing code into this structure or send a ready-to-copy version?
-
-
-
-
-
-
-
-
-You said:
-yes please
-
-
-ChatGPT said:
-Here is a ready-to-copy HTML + CSS version of your Harness Race Timer UI, optimized for smartphones. It uses a mobile-first layout with:
-
-Top section for track and distance selection
-
-Middle section for displaying fraction times
-
-Bottom section for race controls (Start, Trigger, Stop, etc.)
-
-✅ Full HTML + CSS (Smartphone-Friendly Layout)
-html
-Copy
-Edit
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -203,7 +113,6 @@ Edit
     <button onclick="resetRace()">Reset</button>
   </div>
 </div>
-
   <script>
     let timer = null;
     let fifths = 0;
