@@ -1,125 +1,208 @@
+<div class="container">
+  <!-- Top Section -->
+  <div class="top-section">
+    <select id="trackName">...</select>
+    <select id="raceDistance">...</select>
+    <div id="raceInfo">Race #3 – 1 Mile</div>
+  </div>
+
+  <!-- Middle Section (Fractions) -->
+  <div class="fractions-section">
+    <div class="fraction">1/4: <span id="frac1">--</span></div>
+    <div class="fraction">1/2: <span id="frac2">--</span></div>
+    <div class="fraction">3/4: <span id="frac3">--</span></div>
+    <div class="fraction">Finish: <span id="frac4">--</span></div>
+  </div>
+
+  <!-- Bottom Section (Buttons) -->
+  <div class="controls-section">
+    <button onclick="startRace()">Start Race</button>
+    <button onclick="triggerFraction()">Trigger Fraction</button>
+    <button onclick="stopRace()">Stop</button>
+    <button onclick="resetRace()">Reset</button>
+  </div>
+</div>
+✅ CSS (Mobile-Friendly)
+css
+Copy
+Edit
+.container {
+  padding: 10px;
+  max-width: 480px;
+  margin: auto;
+  font-family: sans-serif;
+}
+
+.top-section,
+.controls-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.fractions-section {
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+button, select {
+  padding: 10px;
+  flex: 1 1 45%;
+  min-width: 120px;
+  font-size: 1em;
+}
+
+@media (max-width: 480px) {
+  .controls-section button {
+    flex: 1 1 100%;
+  }
+}
+Would you like me to format your existing code into this structure or send a ready-to-copy version?
+
+
+
+
+
+
+
+
+You said:
+yes please
+
+
+ChatGPT said:
+Here is a ready-to-copy HTML + CSS version of your Harness Race Timer UI, optimized for smartphones. It uses a mobile-first layout with:
+
+Top section for track and distance selection
+
+Middle section for displaying fraction times
+
+Bottom section for race controls (Start, Trigger, Stop, etc.)
+
+✅ Full HTML + CSS (Smartphone-Friendly Layout)
+html
+Copy
+Edit
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Cujo Entertainment - Harness Race Timer</title>
+  <title>Harness Race Timer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #121212;
-      color: #f5f5f5;
       margin: 0;
-      padding: 40px;
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 15px;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: auto;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 20px;
     }
 
-    h1 {
-      font-size: 2em;
-      color: #FFD700;
-      margin-bottom: 20px;
+    .top-section,
+    .controls-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
     }
 
-    label {
-      margin-right: 10px;
-      font-weight: bold;
-    }
-
-    select, input[type="text"], input[type="number"] {
-      background: #1e1e1e;
-      color: #fff;
-      border: 1px solid #555;
-      padding: 8px 12px;
-      margin: 5px;
-      border-radius: 5px;
+    .top-section select {
+      flex: 1 1 48%;
+      padding: 10px;
       font-size: 1em;
     }
 
-    button {
-    background: #007acc;
-    color: white;
-    border: none;
-    padding: 106px 118px;         /* ⬅️ increased size */
-    margin: 28px;
-    font-size: 3.2em;           /* ⬅️ larger text */
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    min-width: 150px;           /* ⬅️ consistent width */
-  }
-
-    button:hover {
-      background: #005ea6;
-    }
-
-    #liveTime {
-      font-size: 2.5em;
+    #raceInfo {
+      width: 100%;
+      text-align: center;
       font-weight: bold;
-      margin-top: 30px;
-      margin-bottom: 10px;
-      color: #00ffcc;
-    }
-
-    .fractions {
-      background: #1e1e1e;
-      font-size: 1.5em;
-      border: 1px solid #444;
-      border-radius: 10px;
-      padding: 20px;
-      width: 300px;
-      margin-top: 20px;
-    }
-
-    .fractions h3 {
-      margin-top: 0;
       font-size: 1.2em;
-      color: #ffd700;
-      border-bottom: 1px solid #444;
-      padding-bottom: 5px;
+      margin-top: 5px;
     }
 
-    .fractions div {
-      padding: 6px 0;
-      border-bottom: 1px solid #333;
+    .fractions-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      text-align: center;
+      font-size: 1.5em;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .fraction {
+      background: #e0e0e0;
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    .controls-section button {
+      flex: 1 1 45%;
+      padding: 12px;
+      font-size: 1em;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .controls-section button:hover {
+      background: #0056b3;
+    }
+
+    @media (max-width: 480px) {
+      .controls-section button {
+        flex: 1 1 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Cujo Entertainment - Harness Race Timer</h1>
 
-  <div>
-    <label>Track:</label>
-    <select id="trackSelect">
-      <option value="Charlottetown">Charlottetown</option>
-      <option value="Summerside">Summerside</option>
-      <option value="Truro">Truro</option>
-      <option value="North Side">North Side</option>
-      <option value="Inverness">Inverness</option>
+<div class="container">
+  <!-- Top Section -->
+  <div class="top-section">
+    <select id="trackName">
+      <option>Track A</option>
+      <option>Track B</option>
     </select>
-
-    <label>Distance:</label>
-    <select id="distanceSelect">
-      <option value="1 Mile">1 Mile</option>
-      <option value="1 Mile 1/8">1 Mile 1/8</option>
+    <select id="raceDistance">
+      <option>1 Mile</option>
+      <option>1 Mile 1/8</option>
     </select>
+    <div id="raceInfo">Race #1 – 1 Mile</div>
   </div>
 
-  <div style="margin-top: 20px;">
-    <button onclick="readyRace()">Ready</button>
+  <!-- Middle Section -->
+  <div class="fractions-section">
+    <div class="fraction">1/4: <span id="frac1">--</span></div>
+    <div class="fraction">1/2: <span id="frac2">--</span></div>
+    <div class="fraction">3/4: <span id="frac3">--</span></div>
+    <div class="fraction">Finish: <span id="frac4">--</span></div>
+  </div>
+
+  <!-- Bottom Section -->
+  <div class="controls-section">
     <button onclick="startRace()">Start Race</button>
     <button onclick="triggerFraction()">Trigger Fraction</button>
-    <button onclick="stopRace()">Stop Race</button>
+    <button onclick="stopRace()">Stop</button>
     <button onclick="resetRace()">Reset</button>
-    <button onclick="clearDisplay()">Clear</button>
   </div>
-
-  <h2 id="liveTime">Time: 0.0</h2>
-
-  <div class="fractions" id="fractionsContainer">
-    <h3>Fractions</h3>
-    <!-- Fraction entries will appear here -->
-  </div>
+</div>
 
   <script>
     let timer = null;
