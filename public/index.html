@@ -120,7 +120,6 @@
       <option value="1 Mile 1/8">1 Mile 1/8</option>
     </select>
 
-    <button onclick="readyRace()">Ready</button>
     <button onclick="stopRace()">Stop Race</button>
     <button onclick="resetRace()">Reset</button>
     <button onclick="clearDisplay()">Clear</button>
@@ -213,6 +212,7 @@
 
     function resetRace() {
       stopRace();
+      readyRace();
       fifths = 0;
       document.getElementById("liveTime").innerText = "Time: 0.0";
     }
@@ -220,6 +220,7 @@
     function clearDisplay() {
       document.getElementById("fractionsContainer").innerHTML = "<h3>Fractions</h3>";
       fractions = [];
+      readyRace()
     }
 
     document.addEventListener('keydown', async (e) => {
