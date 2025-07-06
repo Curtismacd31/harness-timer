@@ -2,117 +2,141 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Harness Race Timer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cujo Entertainment - Harness Race Timer</title>
   <style>
     body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #121212;
+      color: #f5f5f5;
       margin: 0;
-      font-family: sans-serif;
-      background: #f0f0f0;
-      padding: 15px;
-    }
-
-    .container {
-      max-width: 480px;
-      margin: auto;
+      padding: 40px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      align-items: center;
     }
 
-    .top-section,
-    .controls-section {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
+    h1 {
+      font-size: 2em;
+      color: #FFD700;
+      margin-bottom: 20px;
     }
 
-    .top-section select {
-      flex: 1 1 48%;
-      padding: 10px;
-      font-size: 1em;
-    }
-
-    #raceInfo {
-      width: 100%;
-      text-align: center;
+    label {
+      margin-right: 10px;
       font-weight: bold;
-      font-size: 1.2em;
-      margin-top: 5px;
     }
 
-    .fractions-section {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-      text-align: center;
-      font-size: 1.5em;
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-    }
-
-    .fraction {
-      background: #e0e0e0;
-      border-radius: 6px;
-      padding: 10px;
-    }
-
-    .controls-section button {
-      flex: 1 1 45%;
-      padding: 12px;
+    select, input[type="text"], input[type="number"] {
+      background: #1e1e1e;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 8px 12px;
+      margin: 5px;
+      border-radius: 5px;
       font-size: 1em;
-      background: #007bff;
+    }
+
+    button {
+      background: #007acc;
       color: white;
       border: none;
+      padding: 32px 48px;
+      margin: 20px;
+      font-size: 2em;
       border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s ease;
+      min-width: 200px;
     }
 
-    .controls-section button:hover {
-      background: #0056b3;
+    button:hover {
+      background: #005ea6;
     }
 
-    @media (max-width: 480px) {
-      .controls-section button {
-        flex: 1 1 100%;
-      }
+    #liveTime {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      color: #00ffcc;
+    }
+
+    .fractions {
+      background: #1e1e1e;
+      font-size: 1.5em;
+      border: 1px solid #444;
+      border-radius: 10px;
+      padding: 20px;
+      width: 300px;
+      margin-top: 20px;
+    }
+
+    .fractions h3 {
+      margin-top: 0;
+      font-size: 1.2em;
+      color: #ffd700;
+      border-bottom: 1px solid #444;
+      padding-bottom: 5px;
+    }
+
+    .fractions div {
+      padding: 6px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .top-controls {
+      margin-bottom: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .bottom-controls {
+      position: fixed;
+      bottom: 40px;
+      display: flex;
+      gap: 40px;
     }
   </style>
 </head>
 <body>
+  <h1>Cujo Entertainment - Harness Race Timer</h1>
 
-<div class="container">
-  <!-- Top Section -->
-  <div class="top-section">
-    <select id="trackName">
-      <option>Track A</option>
-      <option>Track B</option>
+  <div class="top-controls">
+    <label>Track:</label>
+    <select id="trackSelect">
+      <option value="Charlottetown">Charlottetown</option>
+      <option value="Summerside">Summerside</option>
+      <option value="Truro">Truro</option>
+      <option value="North Side">North Side</option>
+      <option value="Inverness">Inverness</option>
     </select>
-    <select id="raceDistance">
-      <option>1 Mile</option>
-      <option>1 Mile 1/8</option>
+
+    <label>Distance:</label>
+    <select id="distanceSelect">
+      <option value="1 Mile">1 Mile</option>
+      <option value="1 Mile 1/8">1 Mile 1/8</option>
     </select>
-    <div id="raceInfo">Race #1 – 1 Mile</div>
+
+    <button onclick="readyRace()">Ready</button>
+    <button onclick="stopRace()">Stop Race</button>
+    <button onclick="resetRace()">Reset</button>
+    <button onclick="clearDisplay()">Clear</button>
   </div>
 
-  <!-- Middle Section -->
-  <div class="fractions-section">
-    <div class="fraction">1/4: <span id="frac1">--</span></div>
-    <div class="fraction">1/2: <span id="frac2">--</span></div>
-    <div class="fraction">3/4: <span id="frac3">--</span></div>
-    <div class="fraction">Finish: <span id="frac4">--</span></div>
+  <h2 id="liveTime">Time: 0.0</h2>
+
+  <div class="fractions" id="fractionsContainer">
+    <h3>Fractions</h3>
+    <!-- Fraction entries will appear here -->
   </div>
 
-  <!-- Bottom Section -->
-  <div class="controls-section">
+  <div class="bottom-controls">
     <button onclick="startRace()">Start Race</button>
     <button onclick="triggerFraction()">Trigger Fraction</button>
-    <button onclick="stopRace()">Stop</button>
-    <button onclick="resetRace()">Reset</button>
   </div>
-</div>
+
   <script>
     let timer = null;
     let fifths = 0;
@@ -151,37 +175,32 @@
       document.getElementById("liveTime").innerText = `Time: ${formatTime(fifths)}`;
     }
 
-async function triggerFraction() {
-  const idx = fractions.length;
-  if (idx < labels.length) {
-    const label = labels[idx];
-    const time = formatTime(fifths);
-    const entry = { Distance: label, Time: time };
+    async function triggerFraction() {
+      const idx = fractions.length;
+      if (idx < labels.length) {
+        const label = labels[idx];
+        const time = formatTime(fifths);
+        const entry = { Distance: label, Time: time };
 
-    // 🛑 Auto-stop timer if this is the "Finish" fraction
-    if (label === "Finish") {
-      stopRace();
+        if (label === "Finish") stopRace();
+
+        fractions.push(entry);
+
+        const div = document.createElement("div");
+        div.innerText = `${label}: ${time}`;
+        document.getElementById("fractionsContainer").appendChild(div);
+
+        await fetch('/api/addFraction', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ label, time })
+        });
+      }
     }
-    
-    fractions.push(entry);
-
-    const div = document.createElement("div");
-    div.innerText = `${label}: ${time}`;
-    document.getElementById("fractionsContainer").appendChild(div);
-
-    await fetch('/api/addFraction', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ label, time })
-    });
-
-  }
-}
-
 
     function startRace() {
       if (!timer) {
-        readyRace()
+        readyRace();
         timer = setInterval(updateTime, 200);
       }
     }
@@ -203,15 +222,14 @@ async function triggerFraction() {
     }
 
     document.addEventListener('keydown', async (e) => {
-  if (e.key === 'Enter') {
-    startRace();
-    e.preventDefault();
-  } else if (e.code === 'Space') {
-    e.preventDefault();  // prevent scrolling
-    await triggerFraction();
-  }
-});
-
+      if (e.key === 'Enter') {
+        startRace();
+        e.preventDefault();
+      } else if (e.code === 'Space') {
+        e.preventDefault();
+        await triggerFraction();
+      }
+    });
   </script>
 </body>
 </html>
